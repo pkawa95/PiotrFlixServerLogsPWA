@@ -2,152 +2,248 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
+
 <title>Piotrflix Log Viewer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ❗ BLOKADA ZOOMU + PEŁNY EKRAN -->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1e1e1e">
 
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #1e1e1e;
-        color: #d4d4d4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-    .container {
-        width: 95%;
-        max-width: 500px;
-        padding: 20px;
-        background: #252525;
-        border-radius: 12px;
-        box-shadow: 0 0 14px rgba(0,0,0,0.5);
-    }
-    .logo {
-        width: 180px;
-        display: block;
-        margin: 0 auto 20px;
-    }
-    input {
-        width: 100%;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #333;
-        background: #111;
-        color: #fff;
-        margin-top: 6px;
-    }
-    button {
-        width: 100%;
-        padding: 12px;
-        margin-top: 15px;
-        background: #ff3d00;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: bold;
-    }
-    button:hover { background: #ff5722; }
+/* =========================================
+   GLOBAL FULLSCREEN APP
+   ========================================= */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #1e1e1e;
+    font-family: Arial, sans-serif;
+    color: #d4d4d4;
+    overflow: hidden;
+}
 
-    #error {
-        margin-top: 10px;
-        color: #ff4444;
-        font-weight: bold;
-        text-align: center;
-    }
+.app {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    #logsView { display: none; }
-    #logBox {
-        width: 100%;
-        height: 400px;
-        background: #111;
-        color: #d4d4d4;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #333;
-        overflow-y: auto;
-        white-space: pre-wrap;
-        font-family: Consolas, monospace;
-    }
+/* =========================================
+   LOGIN PANEL
+   ========================================= */
+#loginView {
+    width: 95%;
+    max-width: 480px;
+    background: #252525;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.55);
 
-    #pauseBtn {
-        background: #ff3d00;
-        margin-bottom: 15px;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 👉 NARZUCONA WĄSKA KOLUMNA 320px */
+.login-inner {
+    width: 100%;
+    max-width: 320px;
+}
+
+.logo {
+    width: 180px;
+    display: block;
+    margin: 0 auto 25px;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    background: #111;
+    border-radius: 8px;
+    border: 1px solid #333;
+    margin-top: 6px;
+    font-size: 15px;
+    color: white;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    background: #ff3d00;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #ff5722;
+}
+
+#error {
+    margin-top: 10px;
+    color: #ff4444;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* =========================================
+   LOGS VIEW - WĘŻSZY BOX!
+   ========================================= */
+#logsView {
+    display: none;
+    width: 95%;
+    max-width: 850px;
+    height: 95%;
+    background: #252525;
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.55);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 👉 WĄSKA KOLUMNA DLA LOGÓW 600px */
+.logs-inner {
+    width: 100%;
+    max-width: 600px;
+}
+
+.header-logo {
+    width: 180px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+h2 {
+    margin: 5px 0 15px 0;
+    color: #ff3d00;
+    font-size: 22px;
+    text-align: center;
+}
+
+#pauseBtn {
+    width: 100%;
+    max-width: 300px;
+}
+
+#logBox {
+    width: 100%;
+    height: 100%;
+    min-height: 60vh;
+
+    background: #111;
+    border-radius: 12px;
+    border: 1px solid #333;
+
+    padding: 15px;
+    margin-top: 15px;
+    box-sizing: border-box;
+
+    overflow-y: auto;
+    white-space: pre-wrap;
+
+    font-family: Consolas, monospace;
+    font-size: 14px;
+}
 </style>
 </head>
+
+
 <body>
 
-<div class="container">
+<div class="app">
 
-    <!-- LOGIN -->
+    <!-- ================= LOGIN VIEW ================= -->
     <div id="loginView">
         <img src="logos/logo.png" class="logo">
 
-        <label>Login:</label>
-        <input type="text" id="login">
+        <div class="login-inner">
+            <label>Login:</label>
+            <input type="text" id="login">
 
-        <label>Hasło:</label>
-        <input type="password" id="password">
+            <label>Hasło:</label>
+            <input type="password" id="password">
 
-        <div id="error"></div>
+            <div id="error"></div>
 
-        <button onclick="tryLogin()">Zaloguj</button>
+            <button onclick="tryLogin()">Zaloguj</button>
+        </div>
     </div>
 
-    <!-- LOGS -->
+    <!-- ================= LOGS VIEW ================= -->
     <div id="logsView">
-        <img src="logos/logo.png" class="logo">
+        <img src="logos/logo.png" class="header-logo">
 
-        <h2 style="text-align:center; color:#ff3d00;">API LOGS</h2>
+        <div class="logs-inner">
+            <h2>API LOGS</h2>
 
-        <button id="pauseBtn" onclick="togglePause()">⏸ Pauza</button>
+            <button id="pauseBtn" onclick="togglePause()">⏸ Pauza</button>
 
-        <div id="logBox"></div>
+            <div id="logBox"></div>
+        </div>
     </div>
 
 </div>
 
 <script>
+/* BACKEND URL */
 const SERVER_URL = "https://api.pkportfolio.pl";
 
 let loginUser = "";
 let loginPass = "";
 let paused = false;
 
-// --- AUTH HEADER ---
-function authHeader(user, pwd) {
-    return "Basic " + btoa(user + ":" + pwd);
+/* AUTH HEADER */
+function authHeader(u, p) {
+    return "Basic " + btoa(u + ":" + p);
 }
 
-// --- FETCH LOGS ---
+/* FETCH LOGS */
 async function fetchLogs() {
     try {
         const r = await fetch(`${SERVER_URL}/logs/tail`, {
             headers: { "Authorization": authHeader(loginUser, loginPass) }
         });
 
-        if (r.status === 401) {
+        if (r.status === 401)
             return { error: true, msg: "❌ Błędny login lub hasło (401)" };
-        }
 
-        const json = await r.json();
-        return { error: false, log: json.log };
+        return { error: false, log: (await r.json()).log };
 
     } catch (e) {
         return { error: true, msg: "⚠️ Błąd połączenia: " + e };
     }
 }
 
-// --- LOGIN ---
+/* LOGIN */
 async function tryLogin() {
-    const user = document.getElementById("login").value.trim();
-    const pass = document.getElementById("password").value.trim();
+    const user = login.value.trim();
+    const pass = password.value.trim();
     const err = document.getElementById("error");
 
     if (!user || !pass) {
@@ -155,21 +251,20 @@ async function tryLogin() {
         return;
     }
 
-    const test = await fetchLogs(user, pass);
-
     loginUser = user;
     loginPass = pass;
 
+    const test = await fetchLogs();
     if (test.error) {
         err.innerText = test.msg;
         return;
     }
 
-    document.getElementById("loginView").style.display = "none";
-    document.getElementById("logsView").style.display = "block";
+    loginView.style.display = "none";
+    logsView.style.display = "flex";
 }
 
-// --- LOG UPDATER ---
+/* UPDATE LOGS */
 async function updateLogs() {
     if (paused) return;
 
@@ -184,18 +279,16 @@ async function updateLogs() {
     box.textContent = res.log;
     box.scrollTop = box.scrollHeight;
 }
-
 setInterval(updateLogs, 2000);
 
+/* PAUSE */
 function togglePause() {
     paused = !paused;
-    document.getElementById("pauseBtn").innerText =
-        paused ? "▶ Wznów" : "⏸ Pauza";
-
+    pauseBtn.innerText = paused ? "▶ Wznów" : "⏸ Pauza";
     if (!paused) updateLogs();
 }
 
-// --- PWA Service Worker ---
+/* REGISTER SERVICE WORKER */
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js");
 }
