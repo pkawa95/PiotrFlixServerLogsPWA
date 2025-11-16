@@ -32,7 +32,7 @@ html, body {
     align-items: center;
 }
 
-/* ===================== LOGIN PANEL ===================== */
+/* ========== LOGIN PANEL ========== */
 #loginView {
     width: 95%;
     max-width: 480px;
@@ -96,9 +96,9 @@ button:hover {
     font-weight: bold;
 }
 
-/* ===================== LOGS VIEW ===================== */
+/* ========== LOGS PANEL ========== */
 #logsView {
-    display: none !important;   /* ❗ wymuszone ukrycie */
+    display: none; /*  ✔️ poprawione — bez !important */
     width: 95%;
     max-width: 800px;
     height: 95%;
@@ -107,7 +107,6 @@ button:hover {
     background: #252525;
     box-shadow: 0 0 25px rgba(0,0,0,0.55);
 
-    display: flex;
     flex-direction: column;
     align-items: center;
 }
@@ -233,7 +232,7 @@ async function tryLogin() {
     }
 
     loginView.style.display = "none";
-    logsView.style.display = "flex";
+    logsView.style.display = "flex"; /* ✔ DZIAŁA TERAZ */
 }
 
 /* UPDATE LOGS */
