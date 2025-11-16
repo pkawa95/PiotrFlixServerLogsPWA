@@ -113,7 +113,10 @@ button:hover {
 
 .logs-inner {
     width: 100%;
-    max-width: 600px;
+    max-width: 900px; /* ładniejsza szerokość, idealna */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .header-logo {
@@ -133,8 +136,8 @@ h2 {
 }
 
 #logBox {
+    flex: 1; /* <<< wypełnia całą pozostałą przestrzeń */
     width: 100%;
-    min-height: 60vh;
     background: #111;
     border-radius: 12px;
     border: 1px solid #333;
