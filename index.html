@@ -5,21 +5,14 @@
 
 <title>Piotrflix Log Viewer</title>
 
-<!-- ❗ BLOKADA ZOOMU + PEŁNY EKRAN -->
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0,
-               maximum-scale=1.0, user-scalable=no">
+<!-- FULLSCREEN + NO ZOOM -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1e1e1e">
+<link rel="manifest" href="./manifest.json">
 
 <style>
-/* =========================================
-   GLOBAL FULLSCREEN APP
-   ========================================= */
+/* GLOBAL FULLSCREEN */
 html, body {
     margin: 0;
     padding: 0;
@@ -39,9 +32,7 @@ html, body {
     align-items: center;
 }
 
-/* =========================================
-   LOGIN PANEL
-   ========================================= */
+/* ===================== LOGIN PANEL ===================== */
 #loginView {
     width: 95%;
     max-width: 480px;
@@ -49,26 +40,22 @@ html, body {
     padding: 35px;
     border-radius: 16px;
     box-shadow: 0 0 25px rgba(0,0,0,0.55);
-
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* 👉 NARZUCONA WĄSKA KOLUMNA 320px */
 .login-inner {
     width: 100%;
-    max-width: 320px;
+    max-width: 330px;
 }
 
 .logo {
     width: 180px;
-    display: block;
-    margin: 0 auto 25px;
+    margin-bottom: 20px;
 }
 
 label {
-    display: block;
     margin-top: 10px;
     font-size: 15px;
 }
@@ -79,22 +66,22 @@ input {
     background: #111;
     border-radius: 8px;
     border: 1px solid #333;
-    margin-top: 6px;
+    margin-top: 5px;
     font-size: 15px;
-    color: white;
+    color: #fff;
     box-sizing: border-box;
 }
 
 button {
     width: 100%;
     padding: 14px;
-    margin-top: 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
     background: #ff3d00;
-    color: white;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
     font-weight: bold;
+    color: white;
+    margin-top: 20px;
     cursor: pointer;
 }
 
@@ -109,17 +96,15 @@ button:hover {
     font-weight: bold;
 }
 
-/* =========================================
-   LOGS VIEW - WĘŻSZY BOX!
-   ========================================= */
+/* ===================== LOGS VIEW ===================== */
 #logsView {
-    display: none;
+    display: none !important;   /* ❗ wymuszone ukrycie */
     width: 95%;
-    max-width: 850px;
+    max-width: 800px;
     height: 95%;
-    background: #252525;
-    border-radius: 16px;
     padding: 35px;
+    border-radius: 16px;
+    background: #252525;
     box-shadow: 0 0 25px rgba(0,0,0,0.55);
 
     display: flex;
@@ -127,7 +112,6 @@ button:hover {
     align-items: center;
 }
 
-/* 👉 WĄSKA KOLUMNA DLA LOGÓW 600px */
 .logs-inner {
     width: 100%;
     max-width: 600px;
@@ -135,15 +119,13 @@ button:hover {
 
 .header-logo {
     width: 180px;
-    display: block;
     margin-bottom: 10px;
 }
 
 h2 {
-    margin: 5px 0 15px 0;
-    color: #ff3d00;
     font-size: 22px;
-    text-align: center;
+    margin: 10px 0 20px 0;
+    color: #ff3d00;
 }
 
 #pauseBtn {
@@ -153,51 +135,42 @@ h2 {
 
 #logBox {
     width: 100%;
-    height: 100%;
     min-height: 60vh;
-
     background: #111;
     border-radius: 12px;
     border: 1px solid #333;
-
     padding: 15px;
     margin-top: 15px;
-    box-sizing: border-box;
-
     overflow-y: auto;
-    white-space: pre-wrap;
-
     font-family: Consolas, monospace;
     font-size: 14px;
+    white-space: pre-wrap;
 }
 </style>
 </head>
 
-
 <body>
-
 <div class="app">
 
-    <!-- ================= LOGIN VIEW ================= -->
+    <!-- LOGIN PANEL -->
     <div id="loginView">
-        <img src="logos/logo.png" class="logo">
+        <img src="./logos/logo.png" class="logo">
 
         <div class="login-inner">
             <label>Login:</label>
-            <input type="text" id="login">
+            <input id="login" type="text">
 
             <label>Hasło:</label>
-            <input type="password" id="password">
+            <input id="password" type="password">
 
             <div id="error"></div>
-
             <button onclick="tryLogin()">Zaloguj</button>
         </div>
     </div>
 
-    <!-- ================= LOGS VIEW ================= -->
+    <!-- LOGS PANEL -->
     <div id="logsView">
-        <img src="logos/logo.png" class="header-logo">
+        <img src="./logos/logo.png" class="header-logo">
 
         <div class="logs-inner">
             <h2>API LOGS</h2>
@@ -211,14 +184,13 @@ h2 {
 </div>
 
 <script>
-/* BACKEND URL */
 const SERVER_URL = "https://api.pkportfolio.pl";
 
 let loginUser = "";
 let loginPass = "";
 let paused = false;
 
-/* AUTH HEADER */
+/* AUTH */
 function authHeader(u, p) {
     return "Basic " + btoa(u + ":" + p);
 }
@@ -279,6 +251,7 @@ async function updateLogs() {
     box.textContent = res.log;
     box.scrollTop = box.scrollHeight;
 }
+
 setInterval(updateLogs, 2000);
 
 /* PAUSE */
@@ -288,9 +261,9 @@ function togglePause() {
     if (!paused) updateLogs();
 }
 
-/* REGISTER SERVICE WORKER */
+/* SERVICE WORKER */
 if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
+    navigator.serviceWorker.register("./service-worker.js");
 }
 </script>
 

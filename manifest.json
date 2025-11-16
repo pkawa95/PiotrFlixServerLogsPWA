@@ -3,15 +3,13 @@
   "short_name": "LogViewer",
   "theme_color": "#1e1e1e",
   "background_color": "#1e1e1e",
-
   "display": "fullscreen",
-  "orientation": "portrait",
-  "scope": "/",
-  "start_url": "/index.html",
+  "scope": "./",
+  "start_url": "./",
 
   "icons": [
     {
-      "src": "logos/icon.png",
+      "src": "./logos/icon.png",
       "sizes": "256x256",
       "type": "image/png"
     }
