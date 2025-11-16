@@ -1,0 +1,16 @@
+{
+  "name": "Piotrflix Log Viewer",
+  "short_name": "LogViewer",
+  "theme_color": "#1e1e1e",
+  "background_color": "#1e1e1e",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/index.html",
+  "icons": [
+    {
+      "src": "logos/icon.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ]
+}
