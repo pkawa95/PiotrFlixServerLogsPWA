@@ -6,13 +6,15 @@
 <title>Piotrflix Log Viewer</title>
 
 <!-- FULLSCREEN + NO ZOOM -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+               maximum-scale=1.0, user-scalable=no">
 
 <meta name="theme-color" content="#1e1e1e">
 <link rel="manifest" href="./manifest.json">
 
 <style>
-/* GLOBAL FULLSCREEN */
+/* ================= GLOBAL ================= */
 html, body {
     margin: 0;
     padding: 0;
@@ -29,10 +31,14 @@ html, body {
     height: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* WAŻNE */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
-/* ========== LOGIN PANEL ========== */
+/* ================= LOGIN PANEL ================= */
 #loginView {
     width: 95%;
     max-width: 480px;
@@ -43,6 +49,7 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 40px;
 }
 
 .login-inner {
@@ -96,24 +103,30 @@ button:hover {
     font-weight: bold;
 }
 
-/* ========== LOGS PANEL ========== */
+/* ================= LOGS PANEL ================= */
 #logsView {
-    display: none; /*  ✔️ poprawione — bez !important */
+    display: none;
     width: 95%;
-    max-width: 800px;
-    height: 95%;
-    padding: 35px;
+    max-width: 900px;
+
+    height: calc(100% - 40px);
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    padding: 25px;
     border-radius: 16px;
     background: #252525;
     box-shadow: 0 0 25px rgba(0,0,0,0.55);
 
+    display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .logs-inner {
     width: 100%;
-    max-width: 900px; /* ładniejsza szerokość, idealna */
+    max-width: 900px;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -121,13 +134,14 @@ button:hover {
 
 .header-logo {
     width: 180px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 h2 {
     font-size: 22px;
-    margin: 10px 0 20px 0;
+    margin: 5px 0 15px 0;
     color: #ff3d00;
+    text-align: center;
 }
 
 #pauseBtn {
@@ -135,8 +149,9 @@ h2 {
     max-width: 300px;
 }
 
+/* ============== LOG BOX – FULLSCREEN INSIDE PANEL ============== */
 #logBox {
-    flex: 1; /* <<< wypełnia całą pozostałą przestrzeń */
+    flex: 1;             /* wypełnia pozostałą przestrzeń */
     width: 100%;
     background: #111;
     border-radius: 12px;
@@ -147,6 +162,7 @@ h2 {
     font-family: Consolas, monospace;
     font-size: 14px;
     white-space: pre-wrap;
+    box-sizing: border-box;
 }
 </style>
 </head>
@@ -192,7 +208,7 @@ let loginUser = "";
 let loginPass = "";
 let paused = false;
 
-/* AUTH */
+/* AUTH HEADER */
 function authHeader(u, p) {
     return "Basic " + btoa(u + ":" + p);
 }
@@ -207,7 +223,8 @@ async function fetchLogs() {
         if (r.status === 401)
             return { error: true, msg: "❌ Błędny login lub hasło (401)" };
 
-        return { error: false, log: (await r.json()).log };
+        const json = await r.json();
+        return { error: false, log: json.log };
 
     } catch (e) {
         return { error: true, msg: "⚠️ Błąd połączenia: " + e };
@@ -235,7 +252,7 @@ async function tryLogin() {
     }
 
     loginView.style.display = "none";
-    logsView.style.display = "flex"; /* ✔ DZIAŁA TERAZ */
+    logsView.style.display = "flex";
 }
 
 /* UPDATE LOGS */
@@ -256,14 +273,14 @@ async function updateLogs() {
 
 setInterval(updateLogs, 2000);
 
-/* PAUSE */
+/* PAUSE BUTTON */
 function togglePause() {
     paused = !paused;
     pauseBtn.innerText = paused ? "▶ Wznów" : "⏸ Pauza";
     if (!paused) updateLogs();
 }
 
-/* SERVICE WORKER */
+/* PWA SERVICE WORKER */
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./service-worker.js");
 }
